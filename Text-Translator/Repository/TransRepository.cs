@@ -17,7 +17,7 @@ namespace Text_Translator.Repository
 
         public bool AddTranslation(Models.TranslationModel obj)
         {
-            string connectionString = _configuration.GetConnectionString("AppDbContext"); // Update to use the correct connection string name
+             string connectionString = _configuration.GetConnectionString("AppDbContext"); 
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -36,7 +36,7 @@ namespace Text_Translator.Repository
                     }
                     catch (Exception ex)
                     {
-                        // Handle exceptions as needed
+                       
                         return false;
                     }
                 }
@@ -63,7 +63,7 @@ namespace Text_Translator.Repository
                         {
                             TranslationModel translation = new TranslationModel
                             {
-                                // Assuming your database fields match these property names
+                               
                                 original_text = reader["original_text"].ToString(),
                                 translated_text = reader["translated_text"].ToString(),
                                 requestedAT = DateTime.Parse(reader["requestedAT"].ToString())
@@ -76,7 +76,6 @@ namespace Text_Translator.Repository
                     }
                     catch (Exception ex)
                     {
-                        // Handle exceptions as needed
                         return null;
                     }
                 }
