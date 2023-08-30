@@ -1,0 +1,67 @@
+﻿@model Text_Translator.Models.TranslationModel
+
+@using (Html.BeginForm())
+{
+    <div>
+        <label for="text">Enter Text:</label>
+        <input type="text" id="text" name="text" />
+    </div>
+    <div>
+        <button id="translateButton" type="button">Translate</button>
+    </div>
+    <div>
+        <p>Translation Result:</p>
+        <div id="translationResultContainer"></div>
+    </div>
+}
+
+<!-- Include the JavaScript section if not already present -->
+
+
+<!-- Your HTML markup for the view -->
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $("#translateButton").click(function () {
+                var text = $("#text").val();
+
+                // Translate the text using the API
+                $.ajax({
+                    type: "POST",
+                    url: "/Translation/Translate",
+                    data: { text: text },
+                    success: function (translationResult) {
+                        // Display the translation result
+                        $("#translationResultContainer").html(translationResult);
+
+                        // Save the original and translated text to the database
+                        $.ajax({
+                            type: "POST",
+                            url: "/Translation/SaveTranslation",
+                            data: {
+                                originalText: text,
+                                translatedText: translationResult
+                            },
+                            success: function (saveResult) {
+                                if (saveResult === "true") {
+                                    alert("Translation saved successfully.");
+                                } else {
+                                    alert("Error saving translation.");
+                                }
+                            },
+                            error: function (error) {
+                                alert("Error saving translation: " + error.responseText);
+                            }
+                        });
+                    },
+                    error: function (error) {
+                        alert("Error translating text: " + error.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+}

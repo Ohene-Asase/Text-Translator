@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Text-Translator", "Text-Translator\Text-Translator.csproj", "{F422EFE8-EADC-49E1-89F9-6CFB971C7E91}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Translation Tests", "Translation Tests\Translation Tests.csproj", "{86CE2420-AE17-4E0B-8A28-7A1322E6D0AF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F422EFE8-EADC-49E1-89F9-6CFB971C7E91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F422EFE8-EADC-49E1-89F9-6CFB971C7E91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F422EFE8-EADC-49E1-89F9-6CFB971C7E91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F422EFE8-EADC-49E1-89F9-6CFB971C7E91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86CE2420-AE17-4E0B-8A28-7A1322E6D0AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86CE2420-AE17-4E0B-8A28-7A1322E6D0AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86CE2420-AE17-4E0B-8A28-7A1322E6D0AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86CE2420-AE17-4E0B-8A28-7A1322E6D0AF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FACEB1E0-DF65-4D56-A8AC-E7E29042FB29}
+	EndGlobalSection
+EndGlobal

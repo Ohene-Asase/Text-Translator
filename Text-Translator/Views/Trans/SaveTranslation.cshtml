@@ -1,0 +1,142 @@
+﻿@model Text_Translator.Models.TranslationModel
+
+@using (Html.BeginForm())
+{
+    <div>
+        <label for="text">Enter Text:</label>
+        <input type="text" id="text" name="text" />
+    </div>
+    <div>
+        <button id="translateButton" type="button">Translate</button>
+    </div>
+    <div>
+        <p>Translation Result:</p>
+        <div id="translationResultContainer"></div>
+    </div>
+}
+
+<div>
+    <label for="searchText">Search: </label>
+    <input type="text" id="searchText" />
+</div>
+
+<table id="translationsTable" class="table">
+    <thead>
+        <tr>
+            <th>Original Text</th>
+            <th>Translated Text</th>
+            <th>Requested At</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            // Translate button click event handler
+            $("#translateButton").click(function () {
+                var text = $("#text").val();
+
+                // Translate the text using the API
+                $.ajax({
+                    type: "POST",
+                    url: "https://api.funtranslations.com/translate/leetspeak.json",
+                    data: { text: text },
+                    success: function (apiResponse) {
+                        // Extract the translated text from the API response
+                        var translation = apiResponse.contents.translated;
+
+                        // Display the translation result
+                        $("#translationResultContainer").text(translation);
+
+                        // Save the original and translated text to the database
+                        $.ajax({
+                            type: "POST",
+                            url: "/Trans/SaveTranslation",
+                            data: {
+                                originalText: text,
+                                translatedText: translation
+                            },
+                            success: function (saveResult) {
+                                if (saveResult === "true") {
+                                    alert("Translation saved successfully.");
+                                } else {
+                                    alert("Error saving translation.");
+                                }
+                            },
+                            error: function (error) {
+                                alert("Error saving translation: " + error.responseText);
+                            }
+                        });
+                    },
+                    error: function (error) {
+                        alert("Error translating text: " + error.responseText);
+                    }
+                });
+            });
+
+            // Function to filter the table based on search text
+            function filterTable(searchText) {
+                // Filter the data based on search text
+                var filteredData = originalData.filter(function (translation) {
+                    return (
+                        translation.original_text.toLowerCase().includes(searchText.toLowerCase()) ||
+                        translation.translated_text.toLowerCase().includes(searchText.toLowerCase())
+                    );
+                });
+
+                // Populate the table with filtered data
+                var translationsTable = $("#translationsTable tbody");
+                translationsTable.empty();
+
+                if (filteredData.length > 0) {
+                    // Loop through the filtered data and append it to the table
+                    $.each(filteredData, function (index, translation) {
+                        var row = "<tr>" +
+                            "<td>" + translation.original_text + "</td>" +
+                            "<td>" + translation.translated_text + "</td>" +
+                            "<td>" + translation.requestedAT + "</td>" +
+                            "</tr>";
+                        translationsTable.append(row);
+                    });
+                } else {
+                    // Display a message when no matching records are found
+                    translationsTable.html("<tr><td colspan='3'>No matching records found.</td></tr>");
+                }
+            }
+
+            // Variables to store the original data and the filtered data
+            var originalData = [];
+
+            // Make an AJAX request to load translations when the page loads
+            $.ajax({
+                type: "GET",
+                url: "/Trans/GetAllTranslations", // URL to your GetAllTranslations action
+                success: function (response) {
+                    // Check if there is data to display
+                    if (response && response.length > 0) {
+                        originalData = response; // Store the original data
+                        filterTable(""); // Initial table display
+
+                        // Show the table
+                        $("#translationsTable").parent().show();
+                    } else {
+                        // Hide the table and show a message
+                        $("#translationsTable").parent().hide();
+                        $("#noDataMessage").show();
+                    }
+                },
+                error: function (error) {
+                    console.error("Error: " + error.responseText);
+                }
+            });
+
+            // Search input event handler
+            $("#searchText").on("input", function () {
+                var searchText = $(this).val();
+                filterTable(searchText);
+            });
+        });
+    </script>
+}
